@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Wba.EfBasics.Core.Entities;
+using Wba.EfBasics.Web.Data.Seeding;
 
 namespace Wba.EfBasics.Web.Data
 {
@@ -60,6 +61,8 @@ namespace Wba.EfBasics.Web.Data
                 .Property(c => c.YearlyWage)
                 .HasColumnType("money")
                 .HasPrecision(2);
+            //Seed the database
+            Seeder.Seed(modelBuilder);
             base.OnModelCreating(modelBuilder);
         }
     }
