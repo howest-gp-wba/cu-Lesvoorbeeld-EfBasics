@@ -15,6 +15,6 @@ namespace Wba.EfBasics.Core.Entities
         [Required]
         [MaxLength(150)]
         public string Lastname { get; set; }
-        public ICollection<Coursestudents> Courses { get; set; }
+        public ICollection<Course> Courses { get; set; }
     }
 }
