@@ -14,6 +14,7 @@ namespace Wba.EfBasics.Web.Data
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<ContactInfo> ContactInfos { get; set; }
+        public DbSet<Coursestudents> Coursestudents { get; set; }
 
         public SchoolDbContext(DbContextOptions<SchoolDbContext> options)
             : base(options)
@@ -37,7 +38,29 @@ namespace Wba.EfBasics.Web.Data
                 .WithOne(t => t.ContactInfo)
                 .HasForeignKey<Teacher>(t => t.IdOfcontactInfo);
             //many to many => old school
-
+            modelBuilder.Entity<Coursestudents>()
+                .HasOne(cs => cs.Course)
+                .WithMany(c => c.Students)
+                .HasForeignKey(cs => cs.IdOfCourse)
+                .OnDelete(DeleteBehavior.SetNull);
+              modelBuilder.Entity<Coursestudents>()
+                .HasOne(cs => cs.Student)
+                .WithMany(c => c.Courses)
+                .HasForeignKey(cs => cs.IdOfCourse)
+                .HasForeignKey(c => c.IdOfStudent)
+                .OnDelete(DeleteBehavior.SetNull);
+            modelBuilder.Entity<Coursestudents>()
+                .HasKey(cs => cs.ItemId);
+            //configuration on property level
+            modelBuilder.Entity<Course>()
+                .Property(c => c.Title)
+                .IsRequired()
+                .HasMaxLength(150);
+            //decimal warning 
+            modelBuilder.Entity<Teacher>()
+                .Property(c => c.YearlyWage)
+                .HasColumnType("money")
+                .HasPrecision(2);
                 
 
             base.OnModelCreating(modelBuilder);

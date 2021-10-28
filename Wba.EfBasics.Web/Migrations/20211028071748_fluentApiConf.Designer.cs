@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Wba.EfBasics.Web.Data;
 
 namespace Wba.EfBasics.Web.Migrations
 {
     [DbContext(typeof(SchoolDbContext))]
-    partial class SchoolDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211028071748_fluentApiConf")]
+    partial class fluentApiConf
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -71,26 +73,13 @@ namespace Wba.EfBasics.Web.Migrations
 
             modelBuilder.Entity("Wba.EfBasics.Core.Entities.Coursestudents", b =>
                 {
-                    b.Property<long>("ItemId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("IdOfCourse")
+                    b.Property<long>("IdOfCourse")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("IdOfStudent")
+                    b.Property<long>("IdOfStudent")
                         .HasColumnType("bigint");
 
-                    b.HasKey("ItemId");
-
-                    b.HasIndex("IdOfCourse");
+                    b.HasKey("IdOfCourse", "IdOfStudent");
 
                     b.HasIndex("IdOfStudent");
 
@@ -175,12 +164,14 @@ namespace Wba.EfBasics.Web.Migrations
                     b.HasOne("Wba.EfBasics.Core.Entities.Course", "Course")
                         .WithMany("Students")
                         .HasForeignKey("IdOfCourse")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Wba.EfBasics.Core.Entities.Student", "Student")
                         .WithMany("Courses")
                         .HasForeignKey("IdOfStudent")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Course");
 

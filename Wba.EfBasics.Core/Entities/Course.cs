@@ -8,6 +8,6 @@ namespace Wba.EfBasics.Core.Entities
         //1 course heeft maar 1 teacher = navigation property
         public Teacher Teacher { get; set; }
         public long IdOfTeacher { get; set; }//unshadowed foreign key
-        public ICollection<Student> Students { get; set; }
+        public ICollection<Coursestudents> Students { get; set; }
     }
 }
