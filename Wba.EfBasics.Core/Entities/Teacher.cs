@@ -14,6 +14,6 @@ namespace Wba.EfBasics.Core.Entities
         //1 op veel relatie = navigation property
         public ICollection<Course> Courses { get; set; }
         public ContactInfo ContactInfo { get; set; }
-        public long ContactInfoId { get; set; }
+        public long? ContactInfoId { get; set; }
     }
 }
