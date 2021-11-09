@@ -1,0 +1,19 @@
+﻿@model CoursesIndexViewModel
+
+<table class="table table-hover table-responsive-md">
+    <tr>
+        <th>Title</th>
+    </tr>
+    @foreach(var course in Model.Courses)
+    { 
+        <tr>
+            <td>
+                <a asp-controller="Courses"
+                   asp-action="Students"
+                   asp-route-id="@course.Id">
+                    @course.Title
+                </a>
+            </td>
+        </tr>
+    }
+</table>
