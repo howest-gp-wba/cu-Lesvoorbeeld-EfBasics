@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,20 +19,20 @@ namespace Wba.EfBasics.Web.Controllers
         {
             _schoolDbContext = schoolDbContext;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             //get the data from the database
             //declare the viewmodel
             //fill the model
             CoursesIndexViewModel coursesIndexViewModel
                 = new CoursesIndexViewModel();
-            coursesIndexViewModel.Courses  = _schoolDbContext
+            coursesIndexViewModel.Courses  = await _schoolDbContext
                 .Courses
                 .Select(c => new CoursesInfoViewModel
                 {
                     Id = c.Id,
                     Title = c.Title
-                });
+                }).ToListAsync();
             
             //pass to the view
             return View(coursesIndexViewModel);

@@ -3,6 +3,7 @@
 <table class="table table-hover table-responsive-md">
     <tr>
         <th>Title</th>
+        <th>Action</th>
     </tr>
     @foreach(var course in Model.Courses)
     { 
@@ -14,6 +15,32 @@
                     @course.Title
                 </a>
             </td>
+            <td>
+                <a asp-controller="Courses"
+                   asp-action="Info"
+                   asp-route-id="@course.Id"
+                   class="btn btn-info">
+                    Info
+                </a>
+                <a asp-controller="Courses"
+                   asp-action="Edit"
+                   asp-route-id="@course.Id"
+                   class="btn btn-primary">
+                    Edit
+                </a>
+                <a asp-controller="Courses"
+                   asp-action="Delete"
+                   asp-route-id="@course.Id"
+                   class="btn btn-danger">
+                    Delete
+                </a>
+            </td>
         </tr>
     }
 </table>
+<div>
+    <a asp-controller="Courses"
+       asp-action="Add" class="btn btn-outline-primary">
+        Add a course
+    </a>
+</div>
