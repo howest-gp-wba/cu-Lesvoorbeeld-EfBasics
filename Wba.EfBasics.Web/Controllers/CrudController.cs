@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Wba.EfBasics.Core.Entities;
 using Wba.EfBasics.Web.Data;
 
 namespace Wba.EfBasics.Web.Controllers
@@ -18,18 +19,46 @@ namespace Wba.EfBasics.Web.Controllers
         {
             _schoolDbContext = schoolDbContext;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            //get single course
-            var course = _schoolDbContext
+            ////get single course
+            //var course = await _schoolDbContext
+            //    .Courses
+            //    .Include(c => c.Teacher)
+            //    .ThenInclude(t => t.ContactInfo)
+            //    .Include(c => c.Students)
+            //    .FirstOrDefaultAsync(c => c.Id == 1);
+            //var courses = _schoolDbContext
+            //    .Students
+            //    .Where(s => s.Firstname.Equals("Bas")).ToListAsync();
+            ////declare a course entity
+            //Course newCourse = new Course();
+            //newCourse.Title = "WFA";
+            //newCourse.DateCreated = DateTime.Now;
+            //newCourse.TeacherId = 2;
+            //newCourse.Students = await _schoolDbContext
+            //    .Students.ToListAsync();
+            ////add to dbcontext
+            //_schoolDbContext.Courses.Add(newCourse);
+            ////update
+            var wfaCourse = await _schoolDbContext
                 .Courses
-                .Include(c => c.Teacher)
-                .ThenInclude(t => t.ContactInfo)
-                .Include(c => c.Students)
-                .FirstOrDefault(c => c.Id == 1);
-            var courses = _schoolDbContext
-                .Students
-                .Where(s => s.Firstname.Equals("Bas"));
+                .FirstOrDefaultAsync(c => c.Id == 6);
+            //wfaCourse.Title = "Web Frontend Advanced";
+
+            //delete
+            _schoolDbContext.Courses.Remove(wfaCourse);
+
+            //save to database
+            try
+            {
+                await _schoolDbContext.SaveChangesAsync();
+            }
+            catch(DbUpdateException e)
+            {
+                //redirect to error page
+                //logging
+            }
             return Content("","text/html");
         }
     }
