@@ -1,0 +1,15 @@
+﻿@model StudentsIndexViewmodel
+
+<h1>Students</h1>
+<table class="table table-hover table-responsive-md">
+    <tr>
+        <th>Name</th>
+    </tr>
+    @foreach(var student in Model.Students)
+    { 
+        <tr>
+            <td>@student.StudentName</td>
+        </tr>
+    }
+</table>
+
