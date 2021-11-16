@@ -9,7 +9,7 @@ namespace Wba.EfBasics.Core.Entities
 {
     public class BaseEntity
     {
-        [Key]
+     
         public long Id { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime DateModified { get; set; }
