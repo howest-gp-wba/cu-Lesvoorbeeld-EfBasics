@@ -1,0 +1,17 @@
+﻿@model CoursesAddViewModel
+
+<h1>Add a course</h1>
+<form asp-controller="Courses" asp-action="Add" method="post">
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name"class="form-control">
+        <span class="text-danger" asp-validation-for="Name"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="TeacherId"></label>
+        <select asp-for="TeacherId" asp-items="@Model.Teachers" class="form-control"></select>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+
