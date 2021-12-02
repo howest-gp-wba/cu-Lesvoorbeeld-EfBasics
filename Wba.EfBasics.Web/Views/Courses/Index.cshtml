@@ -3,14 +3,20 @@
 <p>
     Welcome @ViewBag.UserName
 </p>
+@if(TempData.ContainsKey("Message"))
+{
+    <div class="alert alert-primary" role="alert">
+        @TempData["Message"]
+    </div>
+}
 
 <table class="table table-hover table-responsive-md">
     <tr>
         <th>Title</th>
         <th>Action</th>
     </tr>
-    @foreach(var course in Model.Courses)
-    { 
+    @foreach (var course in Model.Courses)
+    {
         <tr>
             <td>
                 <a asp-controller="Courses"

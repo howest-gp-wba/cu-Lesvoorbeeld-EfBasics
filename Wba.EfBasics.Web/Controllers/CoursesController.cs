@@ -84,6 +84,7 @@ namespace Wba.EfBasics.Web.Controllers
             //add to context
             _schoolDbContext.Courses.Add(course);
             await _schoolDbContext.SaveChangesAsync();
+            TempData["Message"] = "Cursus succesvol toegevoegd!";
             return RedirectToAction("Index");
         }
     }
