@@ -7,16 +7,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Wba.EfBasics.Web.Data;
+using Wba.EfBasics.Web.Services.Interfaces;
 
 namespace Wba.EfBasics.Web.Controllers
 {
     public class StudentListController : Controller
     {
         private readonly SchoolDbContext _schoolDbContext;
+        private readonly ISessionServices _sessionServices;
 
-        public StudentListController(SchoolDbContext schoolDbContext)
+        public StudentListController(SchoolDbContext schoolDbContext,
+            ISessionServices sessionServices)
         {
             _schoolDbContext = schoolDbContext;
+            _sessionServices = sessionServices;
         }
         public IActionResult Index()
         {
@@ -34,23 +38,8 @@ namespace Wba.EfBasics.Web.Controllers
             //get the student from db
             var student = await _schoolDbContext.Students
                 .FirstOrDefaultAsync(s => s.Id == id);
-            var students = new List<string>();
-            //check if session list exists add to session
-            if(HttpContext.Session.Keys.Contains("Students"))
-            {
-                //get the list from the session
-                students = JsonConvert.DeserializeObject<List<string>>
-                    (HttpContext.Session.GetString("Students"));
-            }
-            if(!students.Contains($"{student.Firstname} {student.Lastname}"))
-            {
-                students.Add($"{student.Firstname} {student.Lastname}");
-            }
-            //stappen om complexe objecten toe te voegen aan session
-            //stap 1 => zet om naar tekst(serialize(JsonConvert))
-            string serializedStudents = JsonConvert.SerializeObject(students);
-            //stap2 => voeg als text toe aan session
-            HttpContext.Session.SetString("Students",serializedStudents);
+            //use service class to add to session
+            _sessionServices.AddStudentToSessionList($"{student.Firstname} {student.Lastname}");
             TempData["Message"] = "Student added to session list";
             return RedirectToAction("Index");
         }

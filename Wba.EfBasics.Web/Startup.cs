@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Wba.EfBasics.Web.Data;
+using Wba.EfBasics.Web.Services;
+using Wba.EfBasics.Web.Services.Interfaces;
 
 namespace Wba.EfBasics.Web
 {
@@ -27,11 +29,17 @@ namespace Wba.EfBasics.Web
         {
             //register session
             services.AddSession();
+            //add HttpContextAccessor
+            //in order to access HTttpContext
+            //from service classes or ViewComponents
+            services.AddHttpContextAccessor();
             //register DbContext for Dependency Injection
             services.AddDbContext<SchoolDbContext>(
                 options => options
                 .UseSqlServer(Configuration.GetConnectionString("SchoolDb"))
                 );
+            //register own services
+            services.AddTransient<ISessionServices, SessionService>();
             services.AddControllersWithViews();
         }
 
