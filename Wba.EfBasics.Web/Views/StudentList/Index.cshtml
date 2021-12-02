@@ -1,4 +1,15 @@
-﻿
+﻿@model List<string>
 
 <h1>Index</h1>
+<table class="table table-hover">
+    <tr>
+        <th>Student</th>
+    </tr>
+    @foreach(var student in Model)
+    { 
+        <tr>
+            <td>@student</td>
+        </tr>
+    }
+</table>
 
