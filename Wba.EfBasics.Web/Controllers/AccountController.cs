@@ -34,8 +34,16 @@ namespace Wba.EfBasics.Web.Controllers
             //voor good practice; hash the username store hash in cookie
             //and store hash/username in database
             Response.Cookies.Append("Login",accountLoginViewModel.Username,cookieOptions);
-            //log in
+            //create a session for our user
+            HttpContext.Session.SetInt32("LoggedIn", 1);
+            HttpContext.Session.SetString("UserName", accountLoginViewModel.Username);
             return RedirectToAction("Index", "Courses");
+        }
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Login");
         }
 
     }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -26,6 +27,13 @@ namespace Wba.EfBasics.Web.Controllers
         }
         public async Task<IActionResult> Index()
         {
+            //Authorisation old skool
+            if(!HttpContext.Session.Keys.Contains("LoggedIn")
+                || HttpContext.Session.GetInt32("LoggedIn") == 0)
+            {
+                //redirecten naar login
+                return RedirectToAction("Login", "Account");
+            }
             //get the data from the database
             //declare the viewmodel
             //fill the model
@@ -40,7 +48,11 @@ namespace Wba.EfBasics.Web.Controllers
                 }).ToListAsync();
 
             //retrieve ze cookie from the request
-            ViewBag.UserName = Request.Cookies["Login"];
+            //ViewBag.UserName = Request.Cookies["Login"];
+            ////delete ze cookie
+            //Response.Cookies.Delete("Login");
+            //use session to retrieve username
+            ViewBag.UserName = HttpContext.Session.GetString("UserName");
             //pass to the view
             return View(coursesIndexViewModel);
         }

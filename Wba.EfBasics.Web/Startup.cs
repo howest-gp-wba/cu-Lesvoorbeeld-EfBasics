@@ -25,6 +25,8 @@ namespace Wba.EfBasics.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //register session
+            services.AddSession();
             //register DbContext for Dependency Injection
             services.AddDbContext<SchoolDbContext>(
                 options => options
@@ -48,9 +50,10 @@ namespace Wba.EfBasics.Web
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            //use sessions = inject sessions in all controllers
+            app.UseSession();
             app.UseRouting();
-
+            
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
