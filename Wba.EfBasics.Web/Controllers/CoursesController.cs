@@ -38,7 +38,9 @@ namespace Wba.EfBasics.Web.Controllers
                     Id = c.Id,
                     Title = c.Title
                 }).ToListAsync();
-            
+
+            //retrieve ze cookie from the request
+            ViewBag.UserName = Request.Cookies["Login"];
             //pass to the view
             return View(coursesIndexViewModel);
         }

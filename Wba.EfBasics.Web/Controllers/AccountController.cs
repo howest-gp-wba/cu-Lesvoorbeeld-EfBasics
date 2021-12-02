@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,14 @@ namespace Wba.EfBasics.Web.Controllers
             }
             //check user  and
             //check credentials
-            
+            //create a cookie and add to response object
+            //create cookie options
+            CookieOptions cookieOptions = new();
+            cookieOptions.Expires = DateTime.Now.AddMinutes(3);
+            //create ze cookie
+            //voor good practice; hash the username store hash in cookie
+            //and store hash/username in database
+            Response.Cookies.Append("Login",accountLoginViewModel.Username,cookieOptions);
             //log in
             return RedirectToAction("Index", "Courses");
         }
