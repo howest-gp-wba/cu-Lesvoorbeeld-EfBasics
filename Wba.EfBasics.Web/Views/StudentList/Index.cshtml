@@ -1,5 +1,10 @@
 ﻿@model List<string>
-
+@if(TempData.ContainsKey("Message"))
+{ 
+<div class="alert alert-primary" role="alert">
+    @TempData["Message"]
+</div>
+}
 <h1>Index</h1>
 <table class="table table-hover">
     <tr>
@@ -9,6 +14,13 @@
     { 
         <tr>
             <td>@student</td>
+            <td><a asp-controller="StudentList"
+                   asp-action="Remove"
+                   asp-route-student="@student"
+                   class="btn btn-outline-danger">
+                    Remove from list
+                </a>
+            </td>
         </tr>
     }
 </table>

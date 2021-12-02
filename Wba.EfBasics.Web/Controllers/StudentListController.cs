@@ -51,6 +51,23 @@ namespace Wba.EfBasics.Web.Controllers
             string serializedStudents = JsonConvert.SerializeObject(students);
             //stap2 => voeg als text toe aan session
             HttpContext.Session.SetString("Students",serializedStudents);
+            TempData["Message"] = "Student added to session list";
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Remove(string student)
+        {
+            //get the serialized list from session
+            var students = JsonConvert.DeserializeObject<List<string>>
+                    (HttpContext.Session.GetString("Students"));
+            //remove from list
+            students.Remove(student);
+            //store back in session
+            
+            //stap2 => voeg als text toe aan session
+            HttpContext.Session.SetString
+                ("Students", JsonConvert.SerializeObject(students));
+            TempData["Message"] = "Student removed from session list";
             return RedirectToAction("Index");
         }
     }
