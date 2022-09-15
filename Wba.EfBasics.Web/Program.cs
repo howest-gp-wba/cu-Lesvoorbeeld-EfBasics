@@ -1,26 +1,47 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Wba.EfBasics.Web.Data;
+using Wba.EfBasics.Web.Services;
+using Wba.EfBasics.Web.Services.Interfaces;
 
-namespace Wba.EfBasics.Web
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+// Register our own DbContext. It can now be injected and used by EF tooling.
+//register session
+builder.Services.AddSession();
+//add HttpContextAccessor
+//in order to access HTttpContext
+//from service classes or ViewComponents
+builder.Services.AddHttpContextAccessor();
+//register DbContext for Dependency Injection
+builder.Services.AddDbContext<SchoolDbContext>(
+    options => options
+    .UseSqlServer(builder.Configuration.GetConnectionString("SchoolDb"))
+    );
+//register own services
+builder.Services.AddTransient<ISessionServices, SessionService>();
+
+builder.Services.AddControllersWithViews();
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
+    app.UseExceptionHandler("/Home/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
 }
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseSession();
+app.UseRouting();
+
+app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.Run();
