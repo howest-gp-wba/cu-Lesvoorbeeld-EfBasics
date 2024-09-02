@@ -13,11 +13,13 @@ namespace Wba.EfBasics.Web.Controllers
     {
         //declare the database context
         private readonly SchoolDbContext _schoolDbContext;
+        private readonly ILogger<CrudController> _logger;
 
         //inject the dbcontext
-        public CrudController(SchoolDbContext schoolDbContext)
+        public CrudController(SchoolDbContext schoolDbContext, ILogger<CrudController> logger)
         {
             _schoolDbContext = schoolDbContext;
+            _logger = logger;
         }
         public async Task<IActionResult> Index()
         {
@@ -54,10 +56,12 @@ namespace Wba.EfBasics.Web.Controllers
             {
                 await _schoolDbContext.SaveChangesAsync();
             }
-            catch(DbUpdateException e)
+            catch(DbUpdateException dbUpdateException)
             {
-                //redirect to error page
                 //logging
+                _logger.LogError(dbUpdateException.Message);
+                //redirect to error page
+                return RedirectToAction("Error", "Home");    
             }
             return Content("","text/html");
         }
